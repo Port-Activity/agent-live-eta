@@ -1,0 +1,90 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: agent-live-eta
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 600
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          imagePullSecrets:
+          - name: pipeline-docker-registry
+          containers:
+          - name: agent-live-eta
+            image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}-${CICD_GIT_COMMIT}
+            env:
+              - name: API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: API_KEY
+              - name: API_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: API_URL
+              - name: REDIS_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: REDIS_URL
+              - name: LIVE_ETA_OAUTH_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_OAUTH_URL
+              - name: LIVE_ETA_OAUTH_PATH
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_OAUTH_PATH
+              - name: LIVE_ETA_OAUTH_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_OAUTH_CLIENT_ID
+              - name: LIVE_ETA_OAUTH_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_OAUTH_CLIENT_SECRET
+              - name: LIVE_ETA_OAUTH_GRANT_TYPE
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_OAUTH_GRANT_TYPE
+              - name: LIVE_ETA_OAUTH_AUDIENCE
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_OAUTH_AUDIENCE
+              - name: LIVE_ETA_REQUEST_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_REQUEST_URL
+              - name: LIVE_ETA_REQUEST_PATH
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: LIVE_ETA_REQUEST_PATH
+              - name: DESTINATION_COORDINATES
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: DESTINATION_COORDINATES
+              - name: CROSSING_GEOMETRY
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: CROSSING_GEOMETRY
+              - name: AINO_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: agent-live-eta
+                    key: AINO_API_KEY
